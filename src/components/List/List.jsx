@@ -6,15 +6,13 @@ import {
   Typography,
   MenuItem,
   Select,
-  Button,
-  CircularProgress,
   Grid,
 } from "@mui/material";
+import PlaceDetails from "../PlaceDetails/PlaceDetails";
 
 // Combined styled component for form elements
 const StyledForm = styled("form")(({ theme }) => ({
   display: "flex",
-  /*flexDirection: "column",*/
   alignItems: "center",
   justifyContent: "center",
   "& .MuiFormControl-root": {
@@ -36,19 +34,18 @@ const StyledForm = styled("form")(({ theme }) => ({
   },
 }));
 
-const List = () => {
-  const [type, setType] = useState("restaurants");
-  const [rating, setRating] = useState("ratings");
-
+const List = ({ places }) => {
+  const [type, setType] = useState("");
+  const [rating, setRating] = useState("");
+ // console.log("list", places);
   return (
     <>
-      <Typography varient="h4">
+      <Typography variant="h4">
         Restaurants, accommodations, and attractions nearby.
       </Typography>
       <StyledForm>
         <FormControl>
-          <InputLabel htmlFor="my-input"></InputLabel>
-
+          <InputLabel id="type">Restuarants</InputLabel>
           <Select
             id="type"
             value={type}
@@ -59,22 +56,32 @@ const List = () => {
             <MenuItem value="attractions">Attractions</MenuItem>
           </Select>
         </FormControl>
-        {/** 
+
         <FormControl>
-          <InputLabel id="rating"></InputLabel>
+          <InputLabel id="rating">Ratings</InputLabel>
           <Select
             id="rating"
             value={rating}
             onChange={(e) => setRating(e.target.value)}
           >
-            <MenuItem value="">All</MenuItem>
+            <MenuItem value={0}>All</MenuItem>
             <MenuItem value="3">Above 3.0</MenuItem>
             <MenuItem value="4">Above 4.0</MenuItem>
             <MenuItem value="4.5">Above 4.5</MenuItem>
           </Select>
-        </FormControl>*/}
-        {/**<Button variant="contained">Submit</Button>**/}
+        </FormControl>
       </StyledForm>
+      <Grid container spacing={3} sx={{ marginTop: "50px" }}>
+        {Array.isArray(places) && places.length > 0 ? (
+          places.map((place, i) => (
+            <Grid item key={i} xs={12}>
+              <PlaceDetails place={place} />
+            </Grid>
+          ))
+        ) : (
+          <Typography variant="h6"></Typography>
+        )}
+      </Grid>
     </>
   );
 };
